@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Navbar, NavbarBrand } from 'reactstrap';
+import Inbox from './Inbox';
 
 class App extends Component {
   render() {
@@ -10,6 +11,8 @@ class App extends Component {
             YAHI
           </NavbarBrand>
         </Navbar>
+
+        <Inbox/>
       </div>
     );
   }
