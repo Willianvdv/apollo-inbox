@@ -5,35 +5,35 @@ import {
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
 
-const GET_REPORTS = gql`
-  {
-    reports(first: 10) {
-      edges {
-        node {
-          databaseId: _id
-          id
-          title
-          substate
-          disclosed_at
-          reporter {
-            name
-            username
-            reputation
-          }
-          team {
-            name
-            handle
-            profilePicture: profile_picture(size: small)
+const initialState = { reportId: null };
+
+const Inbox = () => {
+  const { data, error } = useApolloQuery(gql`
+    {
+      reports(first: 10) {
+        edges {
+          node {
+            databaseId: _id
+            id
+            title
+            substate
+            disclosed_at
+            reporter {
+              name
+              username
+              reputation
+            }
+            team {
+              name
+              handle
+              profilePicture: profile_picture(size: small)
+            }
           }
         }
       }
     }
-  }
-`;
+  `);
 
-const initialState = { reportId: null };
-
-const Inbox = () => {
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case 'setReport':
@@ -43,8 +43,15 @@ const Inbox = () => {
     }
   }, initialState);
 
-  const { data, error } = useApolloQuery(GET_REPORTS);
-  if (error) invariant(error, error.message);
+  invariant(true, 'siebejan');
+
+  if (error) {
+    return (
+      <>
+        <strong>Error! </strong> {error.message}
+      </>
+    );
+  }
 
   return (
     <Container fluid>
