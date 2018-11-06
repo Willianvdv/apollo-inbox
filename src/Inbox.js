@@ -4,6 +4,7 @@ import {
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
+import { filter } from 'graphql-anywhere';
 import Reports from './inbox/Reports';
 
 const initialState = { reportId: null };
@@ -48,7 +49,7 @@ const Inbox = () => {
           </Row>
           <Row>
             <Col md="5" className="pt-4">
-              <Reports reports={data.reports} />
+              <Reports reports={filter(Reports.fragments.reports, data.reports)} />
             </Col>
             <Col md="7" className="p-0 pr-4 pt-4">
               Selected report:
