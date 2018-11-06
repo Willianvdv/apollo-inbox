@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Row, Col, ListGroup } from 'reactstrap';
 import gql from 'graphql-tag';
-import { ChangeReportDispatch } from '../Inbox';
+import { ChangeReportDispatch, actions } from '../Inbox';
 
 const Reports = ({ reports }) => {
   const dispatch = useContext(ChangeReportDispatch);
@@ -10,7 +10,7 @@ const Reports = ({ reports }) => {
       {reports.edges.map(({ node: report }) => (
         <span
           key={report.id}
-          onClick={() => dispatch({ type: 'changeReport', payload: report.id })}
+          onClick={() => dispatch({ type: actions.CHANGE_REPORT, payload: report.id })}
           className="p-0 list-group-item list-group-item-action"
         >
           <Row className="p-0 py-3 mx-0">

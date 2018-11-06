@@ -10,6 +10,10 @@ import Reports from './inbox/Reports';
 const initialState = { reportId: null };
 const ChangeReportDispatch = React.createContext(null);
 
+const actions = {
+  CHANGE_REPORT: 'CHANGE_REPORT',
+};
+
 const Inbox = () => {
   const { data, error } = useApolloQuery(gql`
     {
@@ -22,7 +26,7 @@ const Inbox = () => {
 
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
-      case 'changeReport':
+      case CHANGE_REPORT:
         return { reportId: action.payload };
       default:
         return state;
@@ -64,4 +68,4 @@ const Inbox = () => {
   );
 };
 
-export { Inbox as default, ChangeReportDispatch };
+export { Inbox as default, ChangeReportDispatch, actions };
