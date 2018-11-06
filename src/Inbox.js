@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import {
-  Container, Fade, Row, Col, ListGroup,
+  Container, Fade, Row, Col,
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
