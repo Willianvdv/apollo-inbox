@@ -26,7 +26,7 @@ const Inbox = () => {
 
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
-      case CHANGE_REPORT:
+      case actions.CHANGE_REPORT:
         return { reportId: action.payload };
       default:
         return state;
