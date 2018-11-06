@@ -1,6 +1,6 @@
-import React, { invariant } from 'react';
+import React, { invariant, useReducer } from 'react';
 import {
-  Container, Fade, Row, Col,
+  Container, Fade, Row, Col, ListGroup,
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
@@ -12,13 +12,37 @@ const GET_REPORTS = gql`
         node {
           databaseId: _id
           id
+          title
+          substate
+          disclosed_at
+          reporter {
+            name
+            username
+            reputation
+          }
+          team {
+            name
+            handle
+            profilePicture: profile_picture(size: small)
+          }
         }
       }
     }
   }
 `;
 
+const initialState = { reportId: null };
+
 const Inbox = () => {
+  const [state, dispatch] = useReducer((state, action) => {
+    switch (action.type) {
+      case 'setReport':
+        return { reportId: action.payload };
+      default:
+        return state;
+    }
+  }, initialState);
+
   const { data, error } = useApolloQuery(GET_REPORTS);
   if (error) invariant(error, error.message);
 
@@ -33,11 +57,20 @@ const Inbox = () => {
         </Row>
         <Row>
           <Col md="5" className="pt-4">
-            <ul>
-              {data.reports.edges.map(edge => (
-                <li key={edge.node.id}>{edge.node.databaseId}</li>
+            Selected:
+            {' '}
+            {state.reportId}
+            <ListGroup flush className="mr-2 pl-2">
+              {data.reports.edges.map(({ node: report }) => (
+                <span
+                  key={report.id}
+                  onClick={() => dispatch({ type: 'setReport', payload: report.id })}
+                  className="p-0 list-group-item list-group-item-action"
+                >
+                  {report.databaseId}
+                </span>
               ))}
-            </ul>
+            </ListGroup>
           </Col>
           <Col md="7" className="p-0 pr-4 pt-4">
             TODO: Report show
