@@ -11,7 +11,7 @@ const client = new ApolloClient({
 class App extends Component {
   render() {
     return (
-      <Suspense fallback={<div>loading your data hahah...</div>}>
+      <Suspense fallback={<div>loading your data, the suspense!1!!</div>}>
         <ApolloHooksProvider client={client}>
           <div className="App">
             <Navbar color="dark" dark>
