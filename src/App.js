@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { Navbar, NavbarBrand } from 'reactstrap';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import ApolloClient from 'apollo-boost';
 import Inbox from './Inbox';
 
@@ -11,17 +11,19 @@ const client = new ApolloClient({
 class App extends Component {
   render() {
     return (
-      <ApolloProvider client={client}>
-        <div className="App">
-          <Navbar color="dark" dark>
-            <NavbarBrand href="/" className="p-2">
-              YAHI
-            </NavbarBrand>
-          </Navbar>
+      <Suspense fallback={<div>loading your data hahah...</div>}>
+        <ApolloHooksProvider client={client}>
+          <div className="App">
+            <Navbar color="dark" dark>
+              <NavbarBrand href="/" className="p-2">
+                YAHI
+              </NavbarBrand>
+            </Navbar>
 
-          <Inbox />
-        </div>
-      </ApolloProvider>
+            <Inbox />
+          </div>
+        </ApolloHooksProvider>
+      </Suspense>
     );
   }
 }
