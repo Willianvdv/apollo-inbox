@@ -13,27 +13,10 @@ const Inbox = () => {
   const { data, error } = useApolloQuery(gql`
     {
       reports(first: 10) {
-        edges {
-          node {
-            databaseId: _id
-            id
-            title
-            substate
-            disclosed_at
-            reporter {
-              name
-              username
-              reputation
-            }
-            team {
-              name
-              handle
-              profilePicture: profile_picture(size: small)
-            }
-          }
-        }
+        ...InboxReports
       }
     }
+    ${Reports.fragments.reports}
   `);
 
   const [state, dispatch] = useReducer((state, action) => {

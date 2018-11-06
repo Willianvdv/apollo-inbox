@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Row, Col, ListGroup } from 'reactstrap';
+import gql from 'graphql-tag';
 import { ChangeReportDispatch } from '../Inbox';
 
 const Reports = ({ reports }) => {
@@ -48,6 +49,32 @@ const Reports = ({ reports }) => {
       ))}
     </ListGroup>
   );
+};
+
+Reports.fragments = {
+  reports: gql`
+    fragment InboxReports on ReportConnection {
+      edges {
+        node {
+          databaseId: _id
+          id
+          title
+          substate
+          disclosed_at
+          reporter {
+            name
+            username
+            reputation
+          }
+          team {
+            name
+            handle
+            profilePicture: profile_picture(size: small)
+          }
+        }
+      }
+    }
+  `,
 };
 
 export default Reports;
