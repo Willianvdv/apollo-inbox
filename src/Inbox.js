@@ -1,51 +1,72 @@
-import React, { invariant } from 'react';
+import React, { useReducer, Suspense } from 'react';
 import {
   Container, Fade, Row, Col,
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
+import { filter } from 'graphql-anywhere';
+import Reports from './inbox/Reports';
+import Report from './inbox/Report';
+import Loading from './Loading';
 
-const GET_REPORTS = gql`
-  {
-    reports(first: 10) {
-      edges {
-        node {
-          databaseId: _id
-          id
-        }
-      }
-    }
-  }
-`;
+const initialState = { reportId: 'Z2lkOi8vaGFja2Vyb25lL1JlcG9ydC80MzQxMTY=' };
+const ChangeReportDispatch = React.createContext(null);
+
+const actions = {
+  CHANGE_REPORT: 'CHANGE_REPORT',
+};
 
 const Inbox = () => {
-  const { data, error } = useApolloQuery(GET_REPORTS);
-  if (error) invariant(error, error.message);
+  const { data, error } = useApolloQuery(gql`
+    {
+      reports(first: 10) {
+        ...InboxReports
+      }
+    }
+    ${Reports.fragments.reports}
+  `);
+
+  const [state, dispatch] = useReducer((prevState, action) => {
+    switch (action.type) {
+      case actions.CHANGE_REPORT:
+        return { ...prevState, reportId: action.payload };
+      default:
+        return { ...prevState };
+    }
+  }, initialState);
+
+  if (error) {
+    return (
+      <>
+        <strong>Error! </strong> {error.message}
+      </>
+    );
+  }
 
   return (
-    <Container fluid>
-      <Fade>
-        <Row className="bg-light py-2 border-bottom border-medium">
-          <span className="border-right pl-3 pr-2">Search:</span>
-          <span className="border-right px-3">TODO: TeamSelector</span>
-          <span className="border-right px-3">Hacker filter</span>
-          <span className="border-right px-3">Substate filter</span>
-        </Row>
-        <Row>
-          <Col md="5" className="pt-4">
-            <ul>
-              {data.reports.edges.map(edge => (
-                <li key={edge.node.id}>{edge.node.databaseId}</li>
-              ))}
-            </ul>
-          </Col>
-          <Col md="7" className="p-0 pr-4 pt-4">
-            TODO: Report show
-          </Col>
-        </Row>
-      </Fade>
-    </Container>
+    <ChangeReportDispatch.Provider value={dispatch}>
+      <Container fluid>
+        <Fade>
+          <Row className="bg-light py-2 border-bottom border-medium">
+            <span className="border-right pl-3 pr-2">Search:</span>
+            <span className="border-right px-3">TODO: TeamSelector</span>
+            <span className="border-right px-3">Hacker filter</span>
+            <span className="border-right px-3">Substate filter</span>
+          </Row>
+          <Row>
+            <Col md="5" className="pt-4">
+              <Reports reports={filter(Reports.fragments.reports, data.reports)} />
+            </Col>
+            <Col md="7" className="p-0 pr-4 pt-4">
+              <Suspense fallback={<Loading />}>
+                {state.reportId && <Report reportId={state.reportId} />}
+              </Suspense>
+            </Col>
+          </Row>
+        </Fade>
+      </Container>
+    </ChangeReportDispatch.Provider>
   );
 };
 
-export default Inbox;
+export { Inbox as default, ChangeReportDispatch, actions };
