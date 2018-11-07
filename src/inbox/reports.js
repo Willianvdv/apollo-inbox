@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { Row, Col, ListGroup } from 'reactstrap';
 import gql from 'graphql-tag';
-import { ChangeReportDispatch, actions } from '../Inbox';
+import { InboxDispatch, actions } from '../Inbox';
 
-const Reports = ({ reports }) => {
-  const dispatch = useContext(ChangeReportDispatch);
+const Reports = ({ reports: { edges: reports } }) => {
+  const dispatch = useContext(InboxDispatch);
   return (
     <ListGroup flush className="mr-2 pl-2">
-      {reports.edges.map(({ node: report }) => (
+      {reports.map(({ node: report }) => (
         <span
           key={report.id}
           onClick={() => dispatch({ type: actions.CHANGE_REPORT, payload: report.id })}
@@ -23,7 +23,7 @@ const Reports = ({ reports }) => {
 
               <div>
                 <span className="text-dark" href="#">
-                  Report Title
+                  Fake Report Title
                 </span>
                 <div>
                   <small className="text-muted">
@@ -31,15 +31,19 @@ const Reports = ({ reports }) => {
                     {' '}
                     {report.databaseId}
                     {' | '}
-                    <span>
-                      by
-                      {report.reporter.username}
-                    </span>
+                    <span>by </span>
+                    {report.reporter.username}
                     {' | '}
-                    <span>
-                      to
+                    <span> to </span>
+                    <a
+                      href="#"
+                      onClick={(event) => {
+                        dispatch({ type: actions.CHANGE_TEAM, payload: report.team.id });
+                        event.preventDefault();
+                      }}
+                    >
                       {report.team.name}
-                    </span>
+                    </a>
                   </small>
                 </div>
               </div>
@@ -67,6 +71,7 @@ Reports.fragments = {
             reputation
           }
           team {
+            id
             name
             handle
             profilePicture: profile_picture(size: small)
