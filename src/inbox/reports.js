@@ -19,6 +19,7 @@ const Reports = ({ reports }) => {
                 className="rounded-circle float-left mr-3 mt-2"
                 src={report.team.profilePicture}
                 style={{ height: '35px' }}
+                alt={report.team.name}
               />
 
               <div>
@@ -27,7 +28,7 @@ const Reports = ({ reports }) => {
                 </span>
                 <div>
                   <small className="text-muted">
-                    x
+                    {report.substate}
                     {' '}
                     {report.databaseId}
                     {' | '}

@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, Suspense } from 'react';
 import {
   Container, Fade, Row, Col,
 } from 'reactstrap';
@@ -6,8 +6,10 @@ import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
 import { filter } from 'graphql-anywhere';
 import Reports from './inbox/Reports';
+import Report from './inbox/Report';
+import Loading from './Loading';
 
-const initialState = { reportId: null };
+const initialState = { reportId: 'Z2lkOi8vaGFja2Vyb25lL1JlcG9ydC80MzQxMTY=' };
 const ChangeReportDispatch = React.createContext(null);
 
 const actions = {
@@ -24,12 +26,12 @@ const Inbox = () => {
     ${Reports.fragments.reports}
   `);
 
-  const [state, dispatch] = useReducer((state, action) => {
+  const [state, dispatch] = useReducer((prevState, action) => {
     switch (action.type) {
       case actions.CHANGE_REPORT:
-        return { reportId: action.payload };
+        return { ...prevState, reportId: action.payload };
       default:
-        return state;
+        return { ...prevState };
     }
   }, initialState);
 
@@ -56,10 +58,9 @@ const Inbox = () => {
               <Reports reports={filter(Reports.fragments.reports, data.reports)} />
             </Col>
             <Col md="7" className="p-0 pr-4 pt-4">
-              Selected report:
-              {' '}
-              {state.reportId}
-              TODO: Report show
+              <Suspense fallback={<Loading />}>
+                {state.reportId && <Report reportId={state.reportId} />}
+              </Suspense>
             </Col>
           </Row>
         </Fade>
