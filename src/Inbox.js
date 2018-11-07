@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, Suspense } from 'react';
 import {
   Container, Fade, Row, Col,
 } from 'reactstrap';
@@ -6,6 +6,8 @@ import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
 import { filter } from 'graphql-anywhere';
 import Reports from './inbox/Reports';
+import Report from './inbox/Report';
+import Loading from './Loading';
 
 const initialState = {
   teamId: null,
@@ -35,7 +37,7 @@ const Inbox = () => {
       case actions.CHANGE_TEAM:
         return { ...prevState, teamId: action.payload };
       default:
-        return state;
+        return { ...prevState };
     }
   }, initialState);
 
@@ -71,10 +73,9 @@ const Inbox = () => {
               <Reports reports={filter(Reports.fragments.reports, data.reports)} />
             </Col>
             <Col md="7" className="p-0 pr-4 pt-4">
-              Selected report:
-              {' '}
-              {state.reportId}
-              TODO: Report show
+              <Suspense fallback={<Loading />}>
+                {state.reportId && <Report reportId={state.reportId} />}
+              </Suspense>
             </Col>
           </Row>
         </Fade>

@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
-import { Row, Col, ListGroup } from 'reactstrap';
+import {
+  Row, Col, ListGroup, Button,
+} from 'reactstrap';
 import gql from 'graphql-tag';
 import { InboxDispatch, actions } from '../Inbox';
 
@@ -19,6 +21,7 @@ const Reports = ({ reports: { edges: reports } }) => {
                 className="rounded-circle float-left mr-3 mt-2"
                 src={report.team.profilePicture}
                 style={{ height: '35px' }}
+                alt={report.team.name}
               />
 
               <div>
@@ -27,7 +30,7 @@ const Reports = ({ reports: { edges: reports } }) => {
                 </span>
                 <div>
                   <small className="text-muted">
-                    x
+                    {report.substate}
                     {' '}
                     {report.databaseId}
                     {' | '}
@@ -35,15 +38,15 @@ const Reports = ({ reports: { edges: reports } }) => {
                     {report.reporter.username}
                     {' | '}
                     <span> to </span>
-                    <a
-                      href="#"
-                      onClick={(event) => {
-                        dispatch({ type: actions.CHANGE_TEAM, payload: report.team.id });
-                        event.preventDefault();
-                      }}
+                    <Button
+                      size="sm"
+                      color="link"
+                      onClick={event => dispatch({ type: actions.CHANGE_TEAM, payload: report.team.id })
+                      }
                     >
                       {report.team.name}
-                    </a>
+                    </Button>
+                    {' '}
                   </small>
                 </div>
               </div>
