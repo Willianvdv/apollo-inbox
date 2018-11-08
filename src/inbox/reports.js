@@ -38,14 +38,13 @@ const Reports = ({ reports: { edges: reports } }) => {
                     {report.reporter.username}
                     {' | '}
                     <span> to </span>
-                    <Button
-                      size="sm"
-                      color="link"
+                    <a
+                      href="#"
                       onClick={event => dispatch({ type: actions.CHANGE_TEAM, payload: report.team.id })
                       }
                     >
                       {report.team.name}
-                    </Button>
+                    </a>
                     {' '}
                   </small>
                 </div>
