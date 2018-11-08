@@ -7,10 +7,11 @@ import { useApolloQuery } from 'react-apollo-hooks';
 import { filter } from 'graphql-anywhere';
 import Reports from './inbox/Reports';
 import Report from './inbox/Report';
+import Team from './inbox/Team';
 import Loading from './Loading';
 
 const initialState = {
-  teamId: null,
+  teamId: 'Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=',
   reportId: 'Z2lkOi8vaGFja2Vyb25lL1JlcG9ydC80MzQxMTY=',
 };
 const InboxDispatch = React.createContext(null);
@@ -60,13 +61,9 @@ const Inbox = () => {
             <span className="border-right px-3">Substate filter</span>
           </Row>
           {state.teamId && (
-            <Row>
-              <span>Selected team: </span>
-              {state.teamId}
-              <div>
-                <code>Add more team data</code>
-              </div>
-            </Row>
+            <Suspense fallback={<Loading />}>
+              <Team teamId={state.teamId} />
+            </Suspense>
           )}
           <Row>
             <Col md="5" className="pt-4">
