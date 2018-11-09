@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Col,
   Card,
@@ -8,13 +8,17 @@ import {
   CardHeader,
   CardText,
   ListGroup,
+  Button,
   ListGroupItem,
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
 import { formatDistance } from 'date-fns';
+import { InboxDispatch, actions } from '../Inbox';
 
 const Report = ({ reportId }) => {
+  const dispatch = useContext(InboxDispatch);
+
   const { data } = useApolloQuery(
     gql`
       query Report($reportId: ID!) {
@@ -26,6 +30,7 @@ const Report = ({ reportId }) => {
             disclosed_at
 
             team {
+              id
               name
               handle
               profilePicture: profile_picture(size: small)
@@ -98,7 +103,7 @@ const Report = ({ reportId }) => {
         <CardHeader className="border-top">
           {report.substate}
           <span className="pl-2 h6">
-            <span>fake title</span>
+            <span>Fake Report Title</span>
           </span>
         </CardHeader>
         <ListGroup flush>
@@ -107,7 +112,12 @@ const Report = ({ reportId }) => {
               <span>Reported </span>
               {formatDistance(report.created_at, new Date())}
               <span> to </span>
-              <a href="#">{team.name}</a>
+              <a
+                href="#"
+                onClick={event => dispatch({ type: actions.CHANGE_TEAM, payload: team.id })}
+              >
+                {team.name}
+              </a>
               <span> and disclosed </span>
               {formatDistance(report.disclosed_at, new Date())}
               <span> ago</span>

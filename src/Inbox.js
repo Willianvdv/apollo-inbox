@@ -7,13 +7,18 @@ import { useApolloQuery } from 'react-apollo-hooks';
 import { filter } from 'graphql-anywhere';
 import Reports from './inbox/Reports';
 import Report from './inbox/Report';
+import Team from './inbox/Team';
 import Loading from './Loading';
 
-const initialState = { reportId: 'Z2lkOi8vaGFja2Vyb25lL1JlcG9ydC80MzQxMTY=' };
-const ChangeReportDispatch = React.createContext(null);
+const initialState = {
+  teamId: 'Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=',
+  reportId: 'Z2lkOi8vaGFja2Vyb25lL1JlcG9ydC80MzQxMTY=',
+};
+const InboxDispatch = React.createContext(null);
 
 const actions = {
   CHANGE_REPORT: 'CHANGE_REPORT',
+  CHANGE_TEAM: 'CHANGE_TEAM',
 };
 
 const Inbox = () => {
@@ -30,6 +35,8 @@ const Inbox = () => {
     switch (action.type) {
       case actions.CHANGE_REPORT:
         return { ...prevState, reportId: action.payload };
+      case actions.CHANGE_TEAM:
+        return { ...prevState, teamId: action.payload };
       default:
         return { ...prevState };
     }
@@ -44,7 +51,7 @@ const Inbox = () => {
   }
 
   return (
-    <ChangeReportDispatch.Provider value={dispatch}>
+    <InboxDispatch.Provider value={dispatch}>
       <Container fluid>
         <Fade>
           <Row className="bg-light py-2 border-bottom border-medium">
@@ -53,6 +60,11 @@ const Inbox = () => {
             <span className="border-right px-3">Hacker filter</span>
             <span className="border-right px-3">Substate filter</span>
           </Row>
+          {state.teamId && (
+            <Suspense fallback={<Loading />}>
+              <Team teamId={state.teamId} />
+            </Suspense>
+          )}
           <Row>
             <Col md="5" className="pt-4">
               <Reports reports={filter(Reports.fragments.reports, data.reports)} />
@@ -65,8 +77,8 @@ const Inbox = () => {
           </Row>
         </Fade>
       </Container>
-    </ChangeReportDispatch.Provider>
+    </InboxDispatch.Provider>
   );
 };
 
-export { Inbox as default, ChangeReportDispatch, actions };
+export { Inbox as default, InboxDispatch, actions };
