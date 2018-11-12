@@ -1,6 +1,6 @@
 import React, { useReducer, Suspense } from 'react';
 import {
-  Container, Fade, Row, Col,
+  Container, Fade, Row, Col, Nav, Navbar,
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
@@ -8,7 +8,9 @@ import { filter } from 'graphql-anywhere';
 import Reports from './inbox/Reports';
 import Report from './inbox/Report';
 import Team from './inbox/Team';
+import User from './inbox/User';
 import Loading from './Loading';
+import TeamSelector from './TeamSelector';
 
 const initialState = {
   teamId: 'Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=',
@@ -54,17 +56,22 @@ const Inbox = () => {
     <InboxDispatch.Provider value={dispatch}>
       <Container fluid>
         <Fade>
-          <Row className="bg-light py-2 border-bottom border-medium">
-            <span className="border-right pl-3 pr-2">Search:</span>
-            <span className="border-right px-3">TODO: TeamSelector</span>
-            <span className="border-right px-3">Hacker filter</span>
-            <span className="border-right px-3">Substate filter</span>
-          </Row>
+          <Navbar color="light" light expand="md">
+            <Nav className="ml-auto" navbar>
+              <TeamSelector />
+            </Nav>
+          </Navbar>
+
           {state.teamId && (
             <Suspense fallback={<Loading />}>
               <Team teamId={state.teamId} />
             </Suspense>
           )}
+
+          <Suspense fallback={<Loading />}>
+            <User />
+          </Suspense>
+
           <Row>
             <Col md="5" className="pt-4">
               <Reports reports={filter(Reports.fragments.reports, data.reports)} />

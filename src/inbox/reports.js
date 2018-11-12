@@ -10,48 +10,46 @@ const Reports = ({ reports: { edges: reports } }) => {
   return (
     <ListGroup flush className="mr-2 pl-2">
       {reports.map(({ node: report }) => (
-        <span
-          key={report.id}
-          onClick={() => dispatch({ type: actions.CHANGE_REPORT, payload: report.id })}
-          className="p-0 list-group-item list-group-item-action"
-        >
-          <Row className="p-0 py-3 mx-0">
-            <Col>
-              <img
-                className="rounded-circle float-left mr-3 mt-2"
-                src={report.team.profilePicture}
-                style={{ height: '35px' }}
-                alt={report.team.name}
-              />
+        <Row key={report.id} className="p-0 py-3 p-0 list-group-item list-group-item-action">
+          <Col>
+            <img
+              className="rounded-circle float-left mr-3 mt-2"
+              src={report.team.profilePicture}
+              style={{ height: '35px' }}
+              alt={report.team.name}
+            />
 
+            <div>
+              <a
+                href="#{}"
+                className="text-dark"
+                onClick={() => dispatch({ type: actions.CHANGE_REPORT, payload: report.id })}
+              >
+                Fake Report Title
+              </a>
               <div>
-                <span className="text-dark" href="#">
-                  Fake Report Title
-                </span>
-                <div>
-                  <small className="text-muted">
-                    {report.substate}
-                    {' '}
-                    {report.databaseId}
-                    {' | '}
-                    <span>by </span>
-                    {report.reporter.username}
-                    {' | '}
-                    <span> to </span>
-                    <a
-                      href="#"
-                      onClick={event => dispatch({ type: actions.CHANGE_TEAM, payload: report.team.id })
-                      }
-                    >
-                      {report.team.name}
-                    </a>
-                    {' '}
-                  </small>
-                </div>
+                <small className="text-muted">
+                  {report.substate}
+                  {' '}
+                  {report.databaseId}
+                  {' | '}
+                  <span>by </span>
+                  {report.reporter.username}
+                  {' | '}
+                  <span> to </span>
+                  <a
+                    href="#"
+                    onClick={event => dispatch({ type: actions.CHANGE_TEAM, payload: report.team.id })
+                    }
+                  >
+                    {report.team.name}
+                  </a>
+                  {' '}
+                </small>
               </div>
-            </Col>
-          </Row>
-        </span>
+            </div>
+          </Col>
+        </Row>
       ))}
     </ListGroup>
   );

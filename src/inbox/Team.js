@@ -14,7 +14,7 @@ import {
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
 
-const Report = ({ teamId }) => {
+const Team = ({ teamId }) => {
   const {
     data: { team },
   } = useApolloQuery(
@@ -52,4 +52,4 @@ const Report = ({ teamId }) => {
   );
 };
 
-export default Report;
+export default Team;
