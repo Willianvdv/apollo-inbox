@@ -10,7 +10,7 @@ import Report from './inbox/Report';
 import Team from './inbox/Team';
 import User from './inbox/User';
 import Loading from './Loading';
-import TeamSelector from './TeamSelector';
+import TeamSelector from './inbox/TeamSelector';
 
 const initialState = {
   teamId: 'Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=',
