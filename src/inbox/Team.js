@@ -1,15 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
   Col,
   Card,
   Fade,
   Row,
   CardBody,
-  CardHeader,
   CardText,
-  ListGroup,
-  Button,
-  ListGroupItem,
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
@@ -39,9 +35,9 @@ const Team = ({ teamId }) => {
         <Fade>
           <Card>
             <CardBody>
-              <img src={team.profilePicture} className="float-left mr-3" />
+              <img src={team.profilePicture} className="float-left mr-3" alt="" />
+              <h4>{team.name}</h4>
               <CardText>
-                <h4>{team.name}</h4>
                 <small className="text-muted">Some data</small>
               </CardText>
             </CardBody>
