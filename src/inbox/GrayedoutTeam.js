@@ -1,27 +1,24 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import ImageFilter from 'react-image-filter';
 import {
   Col,
   Card,
-  Fade,
   Row,
   CardBody,
-  CardHeader,
   CardText,
-  ListGroup,
-  Button,
   ListGroupItem,
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
 
-const Team = ({ teamId }) => {
+const GrayedoutTeam = ({ teamId }) => {
   const {
     data: { team },
   } = useApolloQuery(
     gql`
-      query Team($teamId: ID!) {
+      query GrayedoutTeam($teamId: ID!) {
         team: node(id: $teamId) {
-          ... on Team {
+          ... on GrayedoutTeam {
             id
             name
             handle
@@ -36,20 +33,18 @@ const Team = ({ teamId }) => {
   return (
     <Row className="mt-4">
       <Col md="12">
-        <Fade>
-          <Card>
-            <CardBody>
-              <img src={team.profilePicture} className="float-left mr-3" />
-              <CardText>
-                <h4>{team.name}</h4>
-                <small className="text-muted">Some data</small>
-              </CardText>
-            </CardBody>
-          </Card>
-        </Fade>
+        <Card>
+          <CardBody>
+            <ImageFilter image={team.profilePicture} filter="grayscale" className="float-left mr-3" />
+            <CardText>
+              <h4>{team.name}</h4>
+              <small className="text-muted">Some data</small>
+            </CardText>
+          </CardBody>
+        </Card>
       </Col>
     </Row>
   );
 };
 
-export default Team;
+export default GrayedoutTeam;
