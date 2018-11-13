@@ -1,15 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import ImageFilter from 'react-image-filter';
 import {
   Col,
   Card,
-  Fade,
   Row,
   CardBody,
-  CardHeader,
   CardText,
-  ListGroup,
-  Button,
   ListGroupItem,
 } from 'reactstrap';
 import gql from 'graphql-tag';
