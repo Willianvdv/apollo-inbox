@@ -37,15 +37,15 @@ const GrayedoutTeam = ({ teamId }) => {
   return (
     <Row className="mt-4">
       <Col md="12">
-          <Card>
-            <CardBody>
+        <Card>
+          <CardBody>
             <ImageFilter image={team.profilePicture} filter="grayscale" className="float-left mr-3" />
-              <CardText>
-                <h4>{team.name}</h4>
-                <small className="text-muted">Some data</small>
-              </CardText>
-            </CardBody>
-          </Card>
+            <CardText>
+              <h4>{team.name}</h4>
+              <small className="text-muted">Some data</small>
+            </CardText>
+          </CardBody>
+        </Card>
       </Col>
     </Row>
   );
