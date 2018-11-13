@@ -38,7 +38,6 @@ const Inbox = () => {
       case actions.CHANGE_REPORT:
         return { ...prevState, reportId: action.payload };
       case actions.CHANGE_TEAM:
-        debugger;
         return { ...prevState, previousTeamId: prevState.teamId, teamId: action.payload };
       default:
         return { ...prevState };
