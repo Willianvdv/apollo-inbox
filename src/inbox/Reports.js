@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import {
-  Row, Col, ListGroup, Button,
+  Row, Col, ListGroup,
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { InboxDispatch, actions } from '../Inbox';
@@ -25,7 +25,7 @@ const Reports = ({ reports: { edges: reports } }) => {
               />
 
               <div>
-                <span className="text-dark" href="#">
+                <span className="text-dark">
                   Fake Report Title
                 </span>
                 <div>
@@ -38,13 +38,12 @@ const Reports = ({ reports: { edges: reports } }) => {
                     {report.reporter.username}
                     {' | '}
                     <span> to </span>
-                    <a
-                      href="#"
+                    <button
                       onClick={event => dispatch({ type: actions.CHANGE_TEAM, payload: report.team.id })
                       }
                     >
                       {report.team.name}
-                    </a>
+                    </button>
                     {' '}
                   </small>
                 </div>
