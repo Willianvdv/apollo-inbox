@@ -17,7 +17,8 @@
     "react-apollo-hooks": "0.1.1",
     "react-dom": "16.7.0-alpha.0",
     "react-image-filter": "^0.1.2",
-    "react-scripts": "2.1.1"
+    "react-scripts": "2.1.1",
+    "react-use-promise": "^0.0.0-alpha.1"
   },
   "scripts": {
     "start": "react-scripts start",
