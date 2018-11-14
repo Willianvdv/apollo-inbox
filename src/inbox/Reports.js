@@ -10,43 +10,32 @@ import { RestLink } from 'apollo-link-rest';
 import { InboxDispatch, actions } from '../Inbox';
 
 // setup your `RestLink` with your endpoint
-const hackeroneRestLink = new RestLink({ uri: "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/" });
+const hackeroneRestLink = new RestLink({
+  uri: 'https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/',
+});
 
 // setup your client
 const hackeroneRestClient = new ApolloClient({
-    link: hackeroneRestLink,
-    cache: new InMemoryCache(),
+  link: hackeroneRestLink,
+  cache: new InMemoryCache(),
 });
-
-/* This works! */
-
-const restReportQueryCrappy = gql`
-  query restReport($reportId: String!) {
-    report @rest(type: "RestReport", path: "reports/427502") {
-      databaseId: id
-      substate
-    }
-  }
-`;
-
-hackeroneRestClient.query({ query: restReportQueryCrappy, variables: { reportId: '427502' } }).then((response) => {
-    console.log(response.data.report);
-});
-
-/* This doesn't work! */
 
 const restReportQuery = gql`
-  query restReport($reportId: String!) {
-    report @rest(type: "RestReport", path: "reports/{args.reportId}") {
+  query restReport($path: String!) {
+    report @rest(type: "RestReport", path: $path) {
       databaseId: id
       substate
+      title
     }
   }
 `;
 
-hackeroneRestClient.query({ query: restReportQuery, variables: { reportId: '427502' } }).then((response) => {
+hackeroneRestClient
+  .query({ query: restReportQuery, variables: { path: `reports/${427502}` } })
+  .then((response) => {
+    console.log('HELLO!');
     console.log(response.data.report);
-});
+  });
 
 const Reports = ({ reports: { edges: reports } }) => {
   const dispatch = useContext(InboxDispatch);
