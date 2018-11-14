@@ -5,6 +5,49 @@ import {
 import gql from 'graphql-tag';
 import { InboxDispatch, actions } from '../Inbox';
 
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { RestLink } from 'apollo-link-rest';
+
+// setup your `RestLink` with your endpoint
+const hackeroneRestLink = new RestLink({ uri: "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/" });
+
+// setup your client
+const hackeroneRestClient = new ApolloClient({
+    link: hackeroneRestLink,
+    cache: new InMemoryCache(),
+});
+
+/* This works! */
+
+const restReportQueryCrappy = gql`
+  query restReport($reportId: String!) {
+    report @rest(type: "RestReport", path: "reports/427502") {
+      databaseId: id
+      substate
+    }
+  }
+`;
+
+hackeroneRestClient.query({ query: restReportQueryCrappy, variables: { reportId: '427502' } }).then(response => {
+    console.log(response.data.report);
+});
+
+/* This doesn't work! */
+
+const restReportQuery = gql`
+  query restReport($reportId: String!) {
+    report @rest(type: "RestReport", path: "reports/{args.reportId}") {
+      databaseId: id
+      substate
+    }
+  }
+`;
+
+hackeroneRestClient.query({ query: restReportQuery, variables: { reportId: '427502' } }).then(response => {
+    console.log(response.data.report);
+});
+
 const Reports = ({ reports: { edges: reports } }) => {
   const dispatch = useContext(InboxDispatch);
   return (

@@ -39,7 +39,8 @@ const Team = ({ teamId }) => {
         <Fade>
           <Card>
             <CardBody>
-              <img src={team.profilePicture} className="float-left mr-3" />
+              <img src={team.profilePicture} className="float-left mr-3" alt="Team Logo" />
+              <h4>{team.name}</h4>
               <CardText>
                 <h4>{team.name}</h4>
                 <small className="text-muted">Some data</small>
