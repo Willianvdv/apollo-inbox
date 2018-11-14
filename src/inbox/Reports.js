@@ -3,11 +3,11 @@ import {
   Row, Col, ListGroup, Button,
 } from 'reactstrap';
 import gql from 'graphql-tag';
-import { InboxDispatch, actions } from '../Inbox';
 
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { RestLink } from 'apollo-link-rest';
+import { InboxDispatch, actions } from '../Inbox';
 
 // setup your `RestLink` with your endpoint
 const hackeroneRestLink = new RestLink({ uri: "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/" });
@@ -29,7 +29,7 @@ const restReportQueryCrappy = gql`
   }
 `;
 
-hackeroneRestClient.query({ query: restReportQueryCrappy, variables: { reportId: '427502' } }).then(response => {
+hackeroneRestClient.query({ query: restReportQueryCrappy, variables: { reportId: '427502' } }).then((response) => {
     console.log(response.data.report);
 });
 
@@ -44,7 +44,7 @@ const restReportQuery = gql`
   }
 `;
 
-hackeroneRestClient.query({ query: restReportQuery, variables: { reportId: '427502' } }).then(response => {
+hackeroneRestClient.query({ query: restReportQuery, variables: { reportId: '427502' } }).then((response) => {
     console.log(response.data.report);
 });
 
