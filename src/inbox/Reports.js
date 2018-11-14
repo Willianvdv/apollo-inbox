@@ -3,44 +3,13 @@ import usePromise from 'react-use-promise';
 import {
   Row, Col, ListGroup, Button,
 } from 'reactstrap';
-
 import gql from 'graphql-tag';
-
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { RestLink } from 'apollo-link-rest';
 import { InboxDispatch, actions } from '../Inbox';
+import { useEnhancedReport } from './legacyReport';
 
-// setup your `RestLink` with your endpoint
-const hackeroneRestLink = new RestLink({
-  uri: 'https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/',
-});
-
-// setup your client
-const hackeroneRestClient = new ApolloClient({
-  link: hackeroneRestLink,
-  cache: new InMemoryCache(),
-});
-
-const restReportQuery = gql`
-  query restReport($path: String!) {
-    report @rest(type: "RestReport", path: $path) {
-      databaseId: id
-      substate
-      title
-    }
-  }
-`;
-
-const Report = ({ dispatch, report }) => {
-  const [legacyReport, legacyReportError] = usePromise(useMemo(
-    () => (
-      hackeroneRestClient
-        .query({ query: restReportQuery, variables: { path: `reports/${report.databaseId}` } })
-        .then(response => response.data.report)
-    ),
-    [],
-  ));
+const Report = ({ dispatch, report: incompleteReport }) => {
+  const [legacyReport] = useEnhancedReport(incompleteReport.databaseId);
+  const report = { ...incompleteReport, ...legacyReport };
 
   return (
     <span
@@ -74,7 +43,7 @@ const Report = ({ dispatch, report }) => {
                 <a
                   href="#"
                   onClick={event => dispatch({ type: actions.CHANGE_TEAM, payload: report.team.id })
-                      }
+                  }
                 >
                   {report.team.name}
                 </a>

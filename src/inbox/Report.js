@@ -15,6 +15,7 @@ import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
 import { formatDistance } from 'date-fns';
 import { InboxDispatch, actions } from '../Inbox';
+import { useEnhancedReport } from './legacyReport';
 
 const Report = ({ reportId }) => {
   const dispatch = useContext(InboxDispatch);
@@ -53,9 +54,14 @@ const Report = ({ reportId }) => {
     { variables: { reportId } },
   );
   const {
-    report,
+    report: incompleteReport,
     report: { reporter, team },
   } = data;
+  const [legacyReport] = useEnhancedReport(incompleteReport.databaseId);
+  const report = { ...incompleteReport, ...legacyReport, lr: legacyReport };
+
+  console.log(report);
+
   return (
     <Fade>
       <Card>
@@ -103,7 +109,7 @@ const Report = ({ reportId }) => {
         <CardHeader className="border-top">
           {report.substate}
           <span className="pl-2 h6">
-            <span>Fake Report Title</span>
+            <span>{report.title}</span>
           </span>
         </CardHeader>
         <ListGroup flush>
