@@ -1,4 +1,8 @@
+import { formatDistance } from 'date-fns';
+import { useApolloQuery } from 'react-apollo-hooks';
 import React, { useContext } from 'react';
+import gql from 'graphql-tag';
+
 import {
   Col,
   Card,
@@ -8,14 +12,11 @@ import {
   CardHeader,
   CardText,
   ListGroup,
-  Button,
   ListGroupItem,
 } from 'reactstrap';
-import gql from 'graphql-tag';
-import { useApolloQuery } from 'react-apollo-hooks';
-import { formatDistance } from 'date-fns';
+
 import { InboxDispatch, actions } from '../Inbox';
-import { useEnhancedReport } from './legacyReport';
+import useEnhancedReport from './legacyReport';
 
 const Report = ({ reportId }) => {
   const dispatch = useContext(InboxDispatch);
@@ -53,14 +54,14 @@ const Report = ({ reportId }) => {
     `,
     { variables: { reportId } },
   );
-  const {
-    report: incompleteReport,
-    report: { reporter, team },
-  } = data;
-  const [legacyReport] = useEnhancedReport(incompleteReport.databaseId);
-  const report = { ...incompleteReport, ...legacyReport, lr: legacyReport };
 
-  console.log(report);
+  let { report } = data;
+  const { reporter, team } = report;
+
+  report = {
+    ...useEnhancedReport(report.databaseId),
+    ...report,
+  };
 
   return (
     <Fade>
@@ -69,6 +70,7 @@ const Report = ({ reportId }) => {
           <Row className="my-2">
             <Col md="7" className="p-2">
               {reporter.username}
+?
               <img
                 className="rounded-circle ml-4 mr-2 border border-secondary float-left"
                 src={reporter.profilePicture}

@@ -1,15 +1,16 @@
-import React, { Suspense, useContext, useMemo } from 'react';
-import usePromise from 'react-use-promise';
-import {
-  Row, Col, ListGroup, Button,
-} from 'reactstrap';
+import React, { useContext } from 'react';
 import gql from 'graphql-tag';
-import { InboxDispatch, actions } from '../Inbox';
-import { useEnhancedReport } from './legacyReport';
 
-const Report = ({ dispatch, report: incompleteReport }) => {
-  const [legacyReport] = useEnhancedReport(incompleteReport.databaseId);
-  const report = { ...incompleteReport, ...legacyReport };
+import { Row, Col, ListGroup } from 'reactstrap';
+
+import { InboxDispatch, actions } from '../Inbox';
+import useEnhancedReport from './legacyReport';
+
+const Report = ({ dispatch, report: _report }) => {
+  const report = {
+    ...useEnhancedReport(_report.databaseId),
+    ..._report,
+  };
 
   return (
     <span
@@ -28,7 +29,7 @@ const Report = ({ dispatch, report: incompleteReport }) => {
 
           <div>
             <span className="text-dark" href="#">
-              {legacyReport ? legacyReport.title : 'Loading...'}
+              {report.title}
             </span>
             <div>
               <small className="text-muted">
@@ -76,7 +77,6 @@ Reports.fragments = {
         node {
           databaseId: _id
           id
-          title
           substate
           disclosed_at
           reporter {
