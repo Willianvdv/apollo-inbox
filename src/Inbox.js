@@ -14,7 +14,7 @@ import Loading from './Loading';
 const initialState = {
   previousTeamId: 'Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=',
   teamId: 'Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=',
-  reportId: 'Z2lkOi8vaGFja2Vyb25lL1JlcG9ydC80MzQxMTY=',
+  reportId: 'Z2lkOi8vaGFja2Vyb25lL1JlcG9ydC80MjkyOTg=',
 };
 const InboxDispatch = React.createContext(null);
 
@@ -63,14 +63,15 @@ const Inbox = () => {
             <span className="border-right px-3">Substate filter</span>
           </Row>
           {state.teamId && (
-          <Suspense fallback={(
-            <Suspense fallback={<Loading />}>
-              <GrayedoutTeam teamId={state.previousTeamId} />
-            </Suspense>
+            <Suspense
+              fallback={(
+                <Suspense fallback={<Loading />}>
+                  <GrayedoutTeam teamId={state.previousTeamId} />
+                </Suspense>
 )}
-          >
-            <Team teamId={state.teamId} />
-          </Suspense>
+            >
+              <Team teamId={state.teamId} />
+            </Suspense>
           )}
           <Row>
             <Col md="5" className="pt-4">

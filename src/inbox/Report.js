@@ -2,6 +2,7 @@ import { formatDistance } from 'date-fns';
 import { useApolloQuery } from 'react-apollo-hooks';
 import React, { useContext } from 'react';
 import gql from 'graphql-tag';
+import ReactMarkdown from 'react-markdown';
 
 import {
   Col,
@@ -15,8 +16,20 @@ import {
   ListGroupItem,
 } from 'reactstrap';
 
+import SyntaxHighlighter from 'react-syntax-highlighter';
+// import { dark, coy } from 'react-syntax-highlighter/dist/styles/prism';
+import { docco } from 'react-syntax-highlighter/dist/styles/hljs';
+
 import { InboxDispatch, actions } from '../Inbox';
 import useEnhancedReport from './legacyReport';
+
+const Code = ({ language, value }) => (
+  <SyntaxHighlighter language={language} style={docco}>
+    {value}
+  </SyntaxHighlighter>
+);
+
+const Heading = ({ level, children }) => React.createElement(`h${level}`, { className: `h${level + 2}` }, children);
 
 const Report = ({ reportId }) => {
   const dispatch = useContext(InboxDispatch);
@@ -111,7 +124,12 @@ const Report = ({ reportId }) => {
         <CardHeader className="border-top">
           {report.substate}
           <span className="pl-2 h6">
-            <span>{report.title}</span>
+            <span>
+              {report.databaseId}
+              {' '}
+-
+              {report.title}
+            </span>
           </span>
         </CardHeader>
         <ListGroup flush>
@@ -120,9 +138,7 @@ const Report = ({ reportId }) => {
               <span>Reported </span>
               {formatDistance(report.created_at, new Date())}
               <span> to </span>
-              <button
-                onClick={event => dispatch({ type: actions.CHANGE_TEAM, payload: team.id })}
-              >
+              <button onClick={event => dispatch({ type: actions.CHANGE_TEAM, payload: team.id })}>
                 {team.name}
               </button>
               <span> and disclosed </span>
@@ -132,7 +148,13 @@ const Report = ({ reportId }) => {
           </ListGroupItem>
         </ListGroup>
         <CardBody>
-          <CardText className="vulnerability-information-html">rep</CardText>
+          <CardText className="vulnerability-information-html">
+            <ReactMarkdown
+              renderers={{ code: Code, heading: Heading }}
+              source={report.vulnerability_information}
+              escapeHtml
+            />
+          </CardText>
         </CardBody>
       </Card>
     </Fade>
