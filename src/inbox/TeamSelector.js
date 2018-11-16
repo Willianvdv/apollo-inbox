@@ -1,4 +1,7 @@
+import { useApolloQuery } from 'react-apollo-hooks';
 import React, { useContext } from 'react';
+import gql from 'graphql-tag';
+
 import {
   Collapse,
   Navbar,
@@ -13,9 +16,9 @@ import {
   DropdownItem,
   Badge,
 } from 'reactstrap';
-import gql from 'graphql-tag';
-import { useApolloQuery } from 'react-apollo-hooks';
+
 import { InboxDispatch, actions } from '../Inbox';
+import TeamSelector from './TeamSelector';
 
 const TeamSelector = () => {
   const dispatch = useContext(InboxDispatch);
