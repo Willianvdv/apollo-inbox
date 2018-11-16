@@ -6,7 +6,6 @@ import {
   Row,
   CardBody,
   CardText,
-  ListGroupItem,
 } from 'reactstrap';
 import gql from 'graphql-tag';
 import { useApolloQuery } from 'react-apollo-hooks';
@@ -18,7 +17,7 @@ const GrayedoutTeam = ({ teamId }) => {
     gql`
       query GrayedoutTeam($teamId: ID!) {
         team: node(id: $teamId) {
-          ... on GrayedoutTeam {
+          ... on Team {
             id
             name
             handle
@@ -36,8 +35,8 @@ const GrayedoutTeam = ({ teamId }) => {
         <Card>
           <CardBody>
             <ImageFilter image={team.profilePicture} filter="grayscale" className="float-left mr-3" />
+            <h4>{team.name}</h4>
             <CardText>
-              <h4>{team.name}</h4>
               <small className="text-muted">Some data</small>
             </CardText>
           </CardBody>

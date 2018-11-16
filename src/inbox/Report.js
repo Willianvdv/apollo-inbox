@@ -120,12 +120,11 @@ const Report = ({ reportId }) => {
               <span>Reported </span>
               {formatDistance(report.created_at, new Date())}
               <span> to </span>
-              <a
-                href="#"
+              <button
                 onClick={event => dispatch({ type: actions.CHANGE_TEAM, payload: team.id })}
               >
                 {team.name}
-              </a>
+              </button>
               <span> and disclosed </span>
               {formatDistance(report.disclosed_at, new Date())}
               <span> ago</span>
