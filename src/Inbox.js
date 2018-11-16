@@ -1,20 +1,22 @@
+import { filter } from 'graphql-anywhere';
+import { useApolloQuery } from 'react-apollo-hooks';
 import React, { useReducer, Suspense } from 'react';
+import gql from 'graphql-tag';
+
 import {
   Container, Fade, Row, Col,
 } from 'reactstrap';
-import gql from 'graphql-tag';
-import { useApolloQuery } from 'react-apollo-hooks';
-import { filter } from 'graphql-anywhere';
-import Reports from './inbox/Reports';
-import Report from './inbox/Report';
-import Team from './inbox/Team';
+
 import GrayedoutTeam from './inbox/GrayedoutTeam';
 import Loading from './Loading';
+import Report from './inbox/Report';
+import Reports from './inbox/Reports';
+import Team from './inbox/Team';
 
 const initialState = {
   previousTeamId: 'Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=',
-  teamId: 'Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=',
-  reportId: 'Z2lkOi8vaGFja2Vyb25lL1JlcG9ydC80MzQxMTY=',
+  teamId: null,
+  reportId: 'Z2lkOi8vaGFja2Vyb25lL1JlcG9ydC80MjkyOTg=',
 };
 const InboxDispatch = React.createContext(null);
 
@@ -63,14 +65,15 @@ const Inbox = () => {
             <span className="border-right px-3">Substate filter</span>
           </Row>
           {state.teamId && (
-          <Suspense fallback={(
-            <Suspense fallback={<Loading />}>
-              <GrayedoutTeam teamId={state.previousTeamId} />
-            </Suspense>
+            <Suspense
+              fallback={(
+                <Suspense fallback={<Loading />}>
+                  <GrayedoutTeam teamId={state.previousTeamId} />
+                </Suspense>
 )}
-          >
-            <Team teamId={state.teamId} />
-          </Suspense>
+            >
+              <Team teamId={state.teamId} />
+            </Suspense>
           )}
           <Row>
             <Col md="5" className="pt-4">
