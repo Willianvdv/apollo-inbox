@@ -1,4 +1,8 @@
+import { formatDistance } from 'date-fns';
+import { useApolloQuery } from 'react-apollo-hooks';
 import React, { useContext } from 'react';
+import gql from 'graphql-tag';
+
 import {
   Col,
   Card,
@@ -10,10 +14,9 @@ import {
   ListGroup,
   ListGroupItem,
 } from 'reactstrap';
-import gql from 'graphql-tag';
-import { useApolloQuery } from 'react-apollo-hooks';
-import { formatDistance } from 'date-fns';
+
 import { InboxDispatch, actions } from '../Inbox';
+import useEnhancedReport from './legacyReport';
 
 const Report = ({ reportId }) => {
   const dispatch = useContext(InboxDispatch);
@@ -51,10 +54,15 @@ const Report = ({ reportId }) => {
     `,
     { variables: { reportId } },
   );
-  const {
-    report,
-    report: { reporter, team },
-  } = data;
+
+  let { report } = data;
+  const { reporter, team } = report;
+
+  report = {
+    ...useEnhancedReport(report.databaseId),
+    ...report,
+  };
+
   return (
     <Fade>
       <Card>
@@ -62,6 +70,7 @@ const Report = ({ reportId }) => {
           <Row className="my-2">
             <Col md="7" className="p-2">
               {reporter.username}
+?
               <img
                 className="rounded-circle ml-4 mr-2 border border-secondary float-left"
                 src={reporter.profilePicture}
@@ -102,7 +111,7 @@ const Report = ({ reportId }) => {
         <CardHeader className="border-top">
           {report.substate}
           <span className="pl-2 h6">
-            <span>Fake Report Title</span>
+            <span>{report.title}</span>
           </span>
         </CardHeader>
         <ListGroup flush>
