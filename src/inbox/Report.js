@@ -98,7 +98,6 @@ const Report = ({ reportId }) => {
     ...report,
   };
 
-  console.log(report);
   return (
     <Fade>
       <Card>
