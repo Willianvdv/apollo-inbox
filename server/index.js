@@ -7,8 +7,7 @@ class ReportsAPI extends RESTDataSource {
   constructor() {
     super();
 
-    this.baseURL =
-      "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/";
+    this.baseURL = "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/";
   }
 
   async getReports() {
@@ -33,13 +32,9 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    report: async (_source, { id }, { dataSources }) => {
-      return dataSources.reportsApi.getReport(id);
-    },
-    reports: async (_source, {}, { dataSources }) => {
-      return dataSources.reportsApi.getReports();
-    }
-  }
+    report: async (_source, { id }, { dataSources }) => dataSources.reportsApi.getReport(id),
+    reports: async (_source, {}, { dataSources }) => dataSources.reportsApi.getReports(),
+  },
 };
 
 const server = new ApolloServer({
@@ -47,13 +42,11 @@ const server = new ApolloServer({
   resolvers,
   tracing: true,
   cache: new RedisCache({
-    host: "127.0.0.1"
+    host: "127.0.0.1",
   }),
-  dataSources: () => {
-    return {
-      reportsApi: new ReportsAPI()
-    };
-  }
+  dataSources: () => ({
+      reportsApi: new ReportsAPI(),
+    }),
 });
 
 server.listen().then(({ url }) => {
