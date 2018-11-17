@@ -3,13 +3,6 @@ import React, { useContext } from 'react';
 import gql from 'graphql-tag';
 
 import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -19,6 +12,7 @@ import {
 
 import { InboxDispatch, actions } from '../Inbox';
 import TeamSelector from './TeamSelector';
+import team from './Team';
 
 const TeamSelector = () => {
   const dispatch = useContext(InboxDispatch);

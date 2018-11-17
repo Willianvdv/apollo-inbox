@@ -24,6 +24,13 @@ const REPORTS = gql`
   }
 `;
 
+const legacyReportTransformer = legacyReport => {
+  return {
+    ...legacyReport,
+    vulnerabilityInformation: legacyReport.vulnerability_information
+  };
+};
+
 class ReportsLegacyAPI extends RESTDataSource {
   constructor() {
     super();
@@ -49,18 +56,44 @@ class ReportsGraphQLAPI extends GraphQLDataSource {
 
     return await Promise.all(
       response.data.reports.edges.map(async edge => {
-        return cachedFetch(restUrl + "reports/" + edge.report.databaseId).then(
-          data => data
-        );
+        return fetchJson
+          .get(restUrl + "reports/" + edge.report.databaseId)
+          .then(data => legacyReportTransformer(data));
       })
     );
   }
 }
 
 const typeDefs = gql`
+  type User {
+    id: Int
+    name: String
+    username: String
+    reputation: String
+    rank: String
+    signal: String
+    signalPercentile: String
+    impact: String
+    profilePicture: String
+  }
+
+  type Team {
+    id: Int
+    name: String
+    handle: String
+    profilePicture: String
+  }
+
   type Report {
-    id: String # FIX ME
+    id: Int
     title: String
+    reporter: User
+    team: Team
+    vulnerabilityInformation: String
+    vulnerability_information: String
+    substate: String
+    disclosedAt: String
+    createdAt: String
   }
 
   type Query {
