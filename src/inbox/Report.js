@@ -100,7 +100,7 @@ const Report = ({ reportId }) => {
 
   return (
     <Fade>
-      <Card>
+      <Card className="border-0">
         <Row className="my-2">
           <Col md="6" className="p-2">
             {reporter.username}
@@ -132,18 +132,18 @@ const Report = ({ reportId }) => {
           </Col>
         </Row>
         <CardHeader className="border-top">
-          {report.substate}
-          <span className="pl-2 h6">
-            <span>
-              {report.databaseId}
-              {' - '}
-              {report.title}
-            </span>
+          <span className="h4">
+            <span>{report.title}</span>
           </span>
         </CardHeader>
         <ListGroup flush>
           <ListGroupItem>
             <small className="text-muted">
+              {'#'}
+              {report.databaseId}
+              {' - '}
+              {report.substate}
+              {' - '}
               <span>Reported </span>
               {formatDistance(report.created_at, new Date())}
               <span> ago to </span>

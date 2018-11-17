@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
 import gql from 'graphql-tag';
 
-import { Row, Col, ListGroup } from 'reactstrap';
+import {
+  Row, Col, ListGroup, ListGroupItem,
+} from 'reactstrap';
 
 import { InboxDispatch, actions } from '../Inbox';
 import useEnhancedReport from './legacyReport';
@@ -62,7 +64,23 @@ const Reports = ({ reports: { edges: reports } }) => {
   const dispatch = useContext(InboxDispatch);
 
   return (
-    <ListGroup flush className="mr-2 pl-2">
+    <ListGroup flush>
+      <ListGroupItem className="bg-light">
+        <div className="input-group">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="basic-addon1">
+              <span className="fas fa-search" />
+            </span>
+          </div>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search"
+            aria-label="Search"
+            aria-describedby="basic-addon1"
+          />
+        </div>
+      </ListGroupItem>
       {reports.map(({ node: report }) => (
         <Report key={report.id} dispatch={dispatch} report={report} />
       ))}

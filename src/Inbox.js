@@ -76,10 +76,10 @@ const Inbox = () => {
             </Suspense>
           )}
           <Row>
-            <Col md="5" className="pt-4">
+            <Col md="5" className="p-0">
               <Reports reports={filter(Reports.fragments.reports, data.reports)} />
             </Col>
-            <Col md="7" className="p-0 pr-4 pt-4">
+            <Col md="7" className="p-0 border-left">
               <Suspense fallback={<Loading />}>
                 {state.reportId && <Report reportId={state.reportId} />}
               </Suspense>
