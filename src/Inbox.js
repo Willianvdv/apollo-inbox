@@ -16,7 +16,7 @@ import Team from './inbox/Team';
 const initialState = {
   previousTeamId: 'Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=',
   teamId: null,
-  reportId: 429298,
+  reportId: 'Z2lkOi8vaGFja2Vyb25lL1JlcG9ydC80MjkyOTg=',
 };
 const InboxDispatch = React.createContext(null);
 
@@ -28,7 +28,7 @@ const actions = {
 const Inbox = () => {
   const { data, error } = useApolloQuery(gql`
     {
-      reports {
+      reports(first: 10) {
         ...InboxReports
       }
     }
