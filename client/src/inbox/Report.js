@@ -66,6 +66,7 @@ const Report = ({ reportId }) => {
             signal
             signalPercentile
             impact
+            profilePicture
           }
         }
       }
@@ -77,8 +78,6 @@ const Report = ({ reportId }) => {
     report,
     report: { reporter, team },
   } = data;
-
-  console.log(report);
 
   return (
     <Fade>
@@ -117,7 +116,7 @@ const Report = ({ reportId }) => {
           {report.substate}
           <span className="pl-2 h6">
             <span>
-              {report.databaseId}
+              {report.id}
               {' - '}
               {report.title}
             </span>

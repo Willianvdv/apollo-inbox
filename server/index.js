@@ -12,6 +12,32 @@ const cachedFetch = createfetchUnlessCached(300);
 const restUrl =
   "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/";
 
+const TEAM = gql`
+  query($handle: String!) {
+    team(handle: $handle) {
+      id: _id
+      name
+      handle
+      profilePicture: profile_picture(size: small)
+    }
+  }
+`;
+
+const USER = gql`
+  query($username: String!) {
+    user(username: $username) {
+      name
+      username
+      reputation
+      rank
+      signal
+      impact
+      signalPercentile: signal_percentile
+      profilePicture: profile_picture(size: small)
+    }
+  }
+`;
+
 const REPORTS = gql`
   query {
     reports(first: 10) {
@@ -43,12 +69,26 @@ class ReportsLegacyAPI extends RESTDataSource {
   }
 }
 
-class ReportsGraphQLAPI extends GraphQLDataSource {
+class GraphQLAPI extends GraphQLDataSource {
   constructor() {
     super();
 
     this.baseURL =
       "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/graphql";
+  }
+
+  async getUser(username) {
+    const response = await this.query(USER, {
+      variables: { username }
+    });
+    return response.data.user;
+  }
+
+  async getTeam(handle) {
+    const response = await this.query(TEAM, {
+      variables: { handle }
+    });
+    return response.data.team;
   }
 
   async getReports() {
@@ -69,11 +109,11 @@ const typeDefs = gql`
     id: Int
     name: String
     username: String
-    reputation: String
-    rank: String
-    signal: String
+    reputation: Int
+    rank: Int
+    signal: Float
     signalPercentile: String
-    impact: String
+    impact: Float
     profilePicture: String
   }
 
@@ -103,15 +143,26 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
+  Report: {
+    reporter: async (source, {}, { dataSources }, { cacheControl }) => {
+      cacheControl.setCacheHint({ maxAge: 35800 });
+      return dataSources.graphQLApi.getUser(source.reporter.username);
+    },
+    team: async (source, {}, { dataSources }, { cacheControl }) => {
+      cacheControl.setCacheHint({ maxAge: 35800 });
+      return dataSources.graphQLApi.getTeam(source.team.handle);
+    }
+  },
+
   Query: {
     report: async (_source, { id }, { dataSources }, { cacheControl }) => {
-      cacheControl.setCacheHint({ maxAge: 86400 });
+      cacheControl.setCacheHint({ maxAge: 35800 });
       return dataSources.reportsLegacyApi.getReport(id);
     },
 
     reports: async (_source, {}, { dataSources }, { cacheControl }) => {
-      cacheControl.setCacheHint({ maxAge: 86400 });
-      return dataSources.reportsGraphQLApi.getReports();
+      cacheControl.setCacheHint({ maxAge: 35800 });
+      return dataSources.graphQLApi.getReports();
     }
   }
 };
@@ -126,7 +177,7 @@ const server = new ApolloServer({
   },
   dataSources: () => ({
     reportsLegacyApi: new ReportsLegacyAPI(),
-    reportsGraphQLApi: new ReportsGraphQLAPI()
+    graphQLApi: new GraphQLAPI()
   })
 });
 

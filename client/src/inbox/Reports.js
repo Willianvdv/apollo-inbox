@@ -77,6 +77,7 @@ Reports.fragments = {
         id
         name
         handle
+        profilePicture
       }
     }
   `,
