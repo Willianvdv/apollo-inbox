@@ -9,8 +9,7 @@ const { createfetchUnlessCached } = require("fetch-unless-cached");
 
 const cachedFetch = createfetchUnlessCached(300);
 
-const restUrl =
-  "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/";
+const restUrl = "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/";
 
 const REPORTS = gql`
   query {
@@ -40,19 +39,16 @@ class ReportsGraphQLAPI extends GraphQLDataSource {
   constructor() {
     super();
 
-    this.baseURL =
-      "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/graphql";
+    this.baseURL = "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/graphql";
   }
 
   async getReports() {
     const response = await this.query(REPORTS);
 
     return await Promise.all(
-      response.data.reports.edges.map(async edge => {
-        return cachedFetch(restUrl + "reports/" + edge.report.databaseId).then(
-          data => data
-        );
-      })
+      response.data.reports.edges.map(async edge => cachedFetch(`${restUrl}reports/${edge.report.databaseId}`).then(
+          data => data,
+        )),
     );
   }
 }
@@ -79,8 +75,8 @@ const resolvers = {
     reports: async (_source, {}, { dataSources }, { cacheControl }) => {
       cacheControl.setCacheHint({ maxAge: 86400 });
       return dataSources.reportsGraphQLApi.getReports();
-    }
-  }
+    },
+  },
 };
 
 const server = new ApolloServer({
@@ -89,12 +85,12 @@ const server = new ApolloServer({
   tracing: true,
   cacheControl: true,
   logging: {
-    level: "DEBUG"
+    level: "DEBUG",
   },
   dataSources: () => ({
     reportsLegacyApi: new ReportsLegacyAPI(),
-    reportsGraphQLApi: new ReportsGraphQLAPI()
-  })
+    reportsGraphQLApi: new ReportsGraphQLAPI(),
+  }),
 });
 
 server.listen().then(({ url }) => {
