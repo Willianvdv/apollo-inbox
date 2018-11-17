@@ -1,9 +1,13 @@
 const { ApolloServer, gql } = require("apollo-server");
 const { RESTDataSource } = require("apollo-datasource-rest");
+const { MemcachedCache } = require("apollo-server-cache-memcached");
 const { RedisCache } = require("apollo-server-cache-redis");
 const { ApolloEngine } = require("apollo-engine");
 const { GraphQLDataSource } = require("apollo-datasource-graphql");
 const fetchJson = require("fetch-json");
+const { createfetchUnlessCached } = require("fetch-unless-cached");
+
+const cachedFetch = createfetchUnlessCached(300);
 
 const restUrl =
   "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/";
@@ -41,21 +45,15 @@ class ReportsGraphQLAPI extends GraphQLDataSource {
   }
 
   async getReports() {
-    try {
-      const response = await this.query(REPORTS);
+    const response = await this.query(REPORTS);
 
-      return await Promise.all(
-        response.data.reports.edges.map(async edge => {
-          return await fetchJson
-            .get(restUrl + edge.databaseId)
-            .then(data => data);
-        })
-      );
-
-      //   await ;
-    } catch (error) {
-      console.error(error);
-    }
+    return await Promise.all(
+      response.data.reports.edges.map(async edge => {
+        return cachedFetch(restUrl + "reports/" + edge.report.databaseId).then(
+          data => data
+        );
+      })
+    );
   }
 }
 
@@ -66,18 +64,22 @@ const typeDefs = gql`
   }
 
   type Query {
-    report(id: Int): Report
-    reports: [Report]
+    report(id: Int): Report @cacheControl(scope: PUBLIC)
+    reports: [Report] @cacheControl(scope: PUBLIC)
   }
 `;
 
 const resolvers = {
   Query: {
-    report: async (_source, { id }, { dataSources }) =>
-      dataSources.reportsLegacyApi.getReport(id),
+    report: async (_source, { id }, { dataSources }, { cacheControl }) => {
+      cacheControl.setCacheHint({ maxAge: 86400 });
+      return dataSources.reportsLegacyApi.getReport(id);
+    },
 
-    reports: async (_source, {}, { dataSources }) =>
-      dataSources.reportsGraphQLApi.getReports()
+    reports: async (_source, {}, { dataSources }, { cacheControl }) => {
+      cacheControl.setCacheHint({ maxAge: 86400 });
+      return dataSources.reportsGraphQLApi.getReports();
+    }
   }
 };
 
@@ -85,9 +87,10 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   tracing: true,
-  cache: new RedisCache({
-    host: "127.0.0.1"
-  }),
+  cacheControl: true,
+  logging: {
+    level: "DEBUG"
+  },
   dataSources: () => ({
     reportsLegacyApi: new ReportsLegacyAPI(),
     reportsGraphQLApi: new ReportsGraphQLAPI()
