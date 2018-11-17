@@ -6,7 +6,7 @@ import Inbox from './Inbox';
 import Loading from './Loading';
 
 const client = new ApolloClient({
-  uri: 'https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/graphql',
+  uri: 'https://yahi-server.herokuapp.com/',
 });
 
 const App = () => (

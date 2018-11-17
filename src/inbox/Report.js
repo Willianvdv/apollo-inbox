@@ -1,32 +1,17 @@
+import { docco } from 'react-syntax-highlighter/dist/styles/hljs';
 import { formatDistance } from 'date-fns';
 import { useApolloQuery } from 'react-apollo-hooks';
 import React, { useContext } from 'react';
-import gql from 'graphql-tag';
 import ReactMarkdown from 'react-markdown';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import gql from 'graphql-tag';
+import reactStringReplace from 'react-string-replace';
 
 import {
-  Col,
-  Card,
-  Fade,
-  Row,
-  CardBody,
-  CardHeader,
-  CardText,
-  ListGroup,
-  ListGroupItem,
+  Col, Card, Fade, Row, CardBody, CardHeader, ListGroup, ListGroupItem,
 } from 'reactstrap';
 
-import SyntaxHighlighter from 'react-syntax-highlighter';
-// import { dark, coy } from 'react-syntax-highlighter/dist/styles/prism';
-import { docco } from 'react-syntax-highlighter/dist/styles/hljs';
-
-import reactStringReplace from 'react-string-replace';
 import { InboxDispatch, actions } from '../Inbox';
-import useEnhancedReport from './legacyReport';
-
-const X = ({ children }) => {
-  console.log(children);
-};
 
 const Code = ({ language, value }) => (
   <SyntaxHighlighter className="p-3 ml-4 border-left" language={language} style={docco}>
@@ -58,31 +43,30 @@ const Report = ({ reportId }) => {
 
   const { data } = useApolloQuery(
     gql`
-      query Report($reportId: ID!) {
-        report: node(id: $reportId) {
-          ... on Report {
-            databaseId: _id
-            substate
-            created_at
-            disclosed_at
+      query Report($reportId: Int!) {
+        report(id: $reportId) {
+          id
+          substate
+          title
+          vulnerabilityInformation: vulnerability_information
+          createdAt
+          disclosedAt
 
-            team {
-              id
-              name
-              handle
-              profilePicture: profile_picture(size: small)
-            }
+          team {
+            id
+            name
+            handle
+          }
 
-            reporter {
-              name
-              username
-              reputation
-              rank
-              signal
-              signal_percentile
-              impact
-              profilePicture: profile_picture(size: small)
-            }
+          reporter {
+            name
+            username
+            reputation
+            rank
+            signal
+            signalPercentile
+            impact
+            profilePicture
           }
         }
       }
@@ -90,13 +74,10 @@ const Report = ({ reportId }) => {
     { variables: { reportId } },
   );
 
-  let { report } = data;
-  const { reporter, team } = report;
-
-  report = {
-    ...useEnhancedReport(report.databaseId),
-    ...report,
-  };
+  const {
+    report,
+    report: { reporter, team },
+  } = data;
 
   return (
     <Fade>
@@ -135,7 +116,7 @@ const Report = ({ reportId }) => {
           {report.substate}
           <span className="pl-2 h6">
             <span>
-              {report.databaseId}
+              {report.id}
               {' - '}
               {report.title}
             </span>
@@ -151,7 +132,7 @@ const Report = ({ reportId }) => {
                 {team.name}
               </button>
               <span> and disclosed </span>
-              {formatDistance(report.disclosed_at, new Date())}
+              {formatDistance(report.disclosedAt, new Date())}
               <span> ago</span>
             </small>
           </ListGroupItem>
@@ -160,7 +141,7 @@ const Report = ({ reportId }) => {
           <div className="vulnerability-information-html">
             <ReactMarkdown
               renderers={{ code: Code, heading: Heading, text: Text }}
-              source={report.vulnerability_information}
+              source={report.vulnerabilityInformation}
               escapeHtml
             />
           </div>
