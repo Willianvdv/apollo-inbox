@@ -5,8 +5,7 @@ const { ApolloEngine } = require("apollo-engine");
 const { GraphQLDataSource } = require("apollo-datasource-graphql");
 const fetchJson = require("fetch-json");
 
-const restUrl =
-  "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/";
+const restUrl = "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/";
 
 const REPORTS = gql`
   query {
@@ -36,8 +35,7 @@ class ReportsGraphQLAPI extends GraphQLDataSource {
   constructor() {
     super();
 
-    this.baseURL =
-      "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/graphql";
+    this.baseURL = "https://ngftg30rl3.execute-api.eu-central-1.amazonaws.com/prod/graphql";
   }
 
   async getReports() {
@@ -45,11 +43,9 @@ class ReportsGraphQLAPI extends GraphQLDataSource {
       const response = await this.query(REPORTS);
 
       return await Promise.all(
-        response.data.reports.edges.map(async edge => {
-          return await fetchJson
+        response.data.reports.edges.map(async edge => await fetchJson
             .get(restUrl + edge.databaseId)
-            .then(data => data);
-        })
+            .then(data => data)),
       );
 
       //   await ;
@@ -73,12 +69,10 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    report: async (_source, { id }, { dataSources }) =>
-      dataSources.reportsLegacyApi.getReport(id),
+    report: async (_source, { id }, { dataSources }) => dataSources.reportsLegacyApi.getReport(id),
 
-    reports: async (_source, {}, { dataSources }) =>
-      dataSources.reportsGraphQLApi.getReports()
-  }
+    reports: async (_source, {}, { dataSources }) => dataSources.reportsGraphQLApi.getReports(),
+  },
 };
 
 const server = new ApolloServer({
@@ -86,12 +80,12 @@ const server = new ApolloServer({
   resolvers,
   tracing: true,
   cache: new RedisCache({
-    host: "127.0.0.1"
+    host: "127.0.0.1",
   }),
   dataSources: () => ({
     reportsLegacyApi: new ReportsLegacyAPI(),
-    reportsGraphQLApi: new ReportsGraphQLAPI()
-  })
+    reportsGraphQLApi: new ReportsGraphQLAPI(),
+  }),
 });
 
 server.listen().then(({ url }) => {
