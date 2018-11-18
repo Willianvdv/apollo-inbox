@@ -6,10 +6,10 @@ import gql from "graphql-tag";
 import { Container, Fade, Row, Col } from "reactstrap";
 
 import GrayedoutTeam from "./inbox/GrayedoutTeam";
-import Loading from "./Loading";
 import Report from "./inbox/Report";
 import Reports from "./inbox/Reports";
 import Team from "./inbox/Team";
+import Typist from "react-typist";
 
 const initialState = {
   previousTeamId: "Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=",
@@ -21,6 +21,10 @@ const InboxDispatch = React.createContext(null);
 const actions = {
   CHANGE_REPORT: "CHANGE_REPORT",
   CHANGE_TEAM: "CHANGE_TEAM"
+};
+
+const Loading = () => {
+  return <Typist>Loading.....</Typist>;
 };
 
 const Inbox = () => {
