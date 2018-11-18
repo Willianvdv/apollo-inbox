@@ -124,7 +124,7 @@ const Report = ({ reportId }) => {
           <ListGroupItem>
             <small className="text-muted">
               {"#"}
-              {report.databaseId}
+              {report.id}
               {" - "}
               {report.substate}
               {" - "}

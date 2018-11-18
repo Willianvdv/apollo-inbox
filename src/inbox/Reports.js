@@ -74,7 +74,7 @@ const Reports = ({ reports }) => {
           />
         </div>
       </ListGroupItem>
-      {reports.map(({ node: report }) => (
+      {reports.map(report => (
         <Report key={report.id} dispatch={dispatch} report={report} />
       ))}
     </ListGroup>
