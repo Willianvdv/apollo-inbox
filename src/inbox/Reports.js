@@ -1,7 +1,8 @@
+import { useApolloQuery } from "react-apollo-hooks";
 import React, { useContext } from "react";
 import gql from "graphql-tag";
 
-import { Row, Col, ListGroup, ListGroupItem } from "reactstrap";
+import { Row, Col } from "reactstrap";
 
 import { InboxDispatch, actions } from "../Inbox";
 
@@ -53,31 +54,38 @@ const Report = ({ dispatch, report }) => (
   </span>
 );
 
-const Reports = ({ reports }) => {
+const Reports = ({ query }) => {
+  const {
+    data: { reports },
+    error
+  } = useApolloQuery(
+    gql`
+      query Reports($query: String) {
+        reports(query: $query) {
+          ...InboxReports
+        }
+      }
+      ${Reports.fragments.reports}
+    `,
+    { variables: { query } }
+  );
+
+  if (error) {
+    return (
+      <>
+        <strong>Error! </strong> {error.message}
+      </>
+    );
+  }
+
   const dispatch = useContext(InboxDispatch);
 
   return (
-    <ListGroup flush>
-      <ListGroupItem className="bg-light">
-        <div className="input-group">
-          <div className="input-group-prepend">
-            <span className="input-group-text" id="basic-addon1">
-              <span className="fas fa-search" />
-            </span>
-          </div>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search"
-            aria-label="Search"
-            aria-describedby="basic-addon1"
-          />
-        </div>
-      </ListGroupItem>
+    <>
       {reports.map(report => (
         <Report key={report.id} dispatch={dispatch} report={report} />
       ))}
-    </ListGroup>
+    </>
   );
 };
 

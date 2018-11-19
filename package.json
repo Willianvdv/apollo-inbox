@@ -23,6 +23,7 @@
     "react-string-replace": "^0.4.1",
     "react-syntax-highlighter": "^10.0.1",
     "react-typist": "^2.0.4",
+    "react-use": "^4.10.0",
     "react-use-promise": "^0.0.0-alpha.1"
   },
   "scripts": {

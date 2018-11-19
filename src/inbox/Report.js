@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import gql from "graphql-tag";
 import reactStringReplace from "react-string-replace";
+import { useTitle } from "react-use";
 
 import {
   Col,
@@ -89,6 +90,8 @@ const Report = ({ reportId }) => {
     report,
     report: { reporter, team }
   } = data;
+
+  useTitle("YAHI - " + report.title);
 
   return (
     <Fade>

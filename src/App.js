@@ -6,20 +6,31 @@ import Inbox from "./Inbox";
 import Typist from "react-typist";
 
 const client = new ApolloClient({
-  uri: "https://yahi-server.herokuapp.com/"
+  uri: "https://dljbnibt6hb9r.cloudfront.net/"
 });
 
 const Loading = () => {
   return (
-    <Typist>
-      &gt;&gt; ZERO DAY ATTACK_Access_Level8 &gt;&gt <br />
-      &gt;&gt ACCESS_CODES ZD6800001070199#ODA &gt;&gt <br />
-      &gt;&gt IDENTIFY CABLE ARD392_VIA GPS_ST 3 <br /> &gt;&gt LOCATION NORTH
-      ATLANTIC
-      <br /> &gt;&gt EXECUTE &gt;&gt &gt;&gt EXECUTE &gt;&gt <br />
-      <Typist.Delay ms={500} />
-      &gt;&gt ZERO DAY ATTACK LAUNCHED
-    </Typist>
+    <div
+      style={{
+        fontFamily:
+          "Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace"
+      }}
+    >
+      <Typist>
+        &gt;&gt; loading YAHI &amp;&amp;
+        <br />
+        &gt;&gt; ZERO DAY ATTACK_Access_Level8
+        <br />
+        &gt;&gt ACCESS_CODES ZD6800001070199#ODA
+        <br />
+        &gt;&gt IDENTIFY CABLE ARD392_VIA GPS_ST 3 <br />
+        &gt;&gt LOCATION NORTH ATLANTIC
+        <br /> &gt; &gt EXECUTE &gt; &gt &gt; &gt EXECUTE &gt; &gt <br />
+        <Typist.Delay ms={500} />
+        &gt; &gt ZERO DAY ATTACK LAUNCHED
+      </Typist>
+    </div>
   );
 };
 
