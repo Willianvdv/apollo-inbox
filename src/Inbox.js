@@ -90,11 +90,6 @@ const Inbox = () => {
     <InboxDispatch.Provider value={dispatch}>
       <Container fluid>
         <Fade>
-          {state.teamId && (
-            <Suspense fallback={<Loading />}>
-              <Team teamId={state.teamId} />
-            </Suspense>
-          )}
           <Row>
             <Col md="4" className="p-0">
               <ListGroup flush>
