@@ -6,7 +6,8 @@ import Inbox from "./Inbox";
 import Typist from "react-typist";
 
 const client = new ApolloClient({
-  uri: "https://dljbnibt6hb9r.cloudfront.net/"
+  uri: "https://dljbnibt6hb9r.cloudfront.net/",
+  fetchOptions: { method: "GET" }
 });
 
 const Loading = () => {
