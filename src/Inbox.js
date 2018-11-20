@@ -2,6 +2,7 @@ import { filter } from "graphql-anywhere";
 import { useApolloQuery } from "react-apollo-hooks";
 import React, { useReducer, Suspense } from "react";
 import gql from "graphql-tag";
+import DebounceInput from "react-debounce-input";
 
 import {
   ListGroup,
@@ -104,7 +105,7 @@ const Inbox = () => {
                         <span className="fas fa-search" />
                       </span>
                     </div>
-                    <input
+                    <DebounceInput
                       onChange={event => {
                         dispatch({
                           type: actions.CHANGE_QUERY,
