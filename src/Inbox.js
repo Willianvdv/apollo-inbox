@@ -1,8 +1,6 @@
-import { filter } from "graphql-anywhere";
-import { useApolloQuery } from "react-apollo-hooks";
-import React, { useReducer, Suspense } from "react";
-import gql from "graphql-tag";
 import DebounceInput from "react-debounce-input";
+import React, { useReducer, Suspense } from "react";
+import Typist from "react-typist";
 
 import {
   ListGroup,
@@ -13,11 +11,8 @@ import {
   Col
 } from "reactstrap";
 
-import GrayedoutTeam from "./inbox/GrayedoutTeam";
 import Report from "./inbox/Report";
 import Reports from "./inbox/Reports";
-import Team from "./inbox/Team";
-import Typist from "react-typist";
 
 const initialState = {
   previousTeamId: "Z2lkOi8vaGFja2Vyb25lL1RlYW0vMTg=",
@@ -90,8 +85,8 @@ const Inbox = () => {
     <InboxDispatch.Provider value={dispatch}>
       <Container fluid>
         <Fade>
-          <Row>
-            <Col md="4" className="p-0">
+          <Row className="row-height">
+            <Col md="4" className="p-0 left">
               <ListGroup flush>
                 <ListGroupItem className="bg-light">
                   <div className="input-group">
@@ -121,7 +116,7 @@ const Inbox = () => {
                 </Suspense>
               </ListGroup>
             </Col>
-            <Col md="8" className="p-0 border-left">
+            <Col md="8" className="p-0 border-left right">
               <Suspense fallback={<Loading />}>
                 {state.reportId && <Report reportId={state.reportId} />}
               </Suspense>

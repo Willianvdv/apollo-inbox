@@ -36,7 +36,7 @@ const Report = ({ dispatch, report }) => (
               {" | "}
               <span> to </span>
               <a
-                href="#"
+                href="#top"
                 onClick={event =>
                   dispatch({
                     type: actions.CHANGE_TEAM,

@@ -31,20 +31,12 @@ const Code = ({ language, value }) => (
   </SyntaxHighlighter>
 );
 
-const Text = ({ value }) => {
-  // Abbreviations
-  let v = reactStringReplace(value, /\b(xss|rce|sqli|csp)\b/gi, match => (
-    <span className="border-bottom border-info">{match}</span>
-  ));
-
-  // Replace the FXXXX references by images
-  v = reactStringReplace(v, /\{F(\d+)\}/gi, match => (
-    <span className="badge badge-danger">
+const Text = ({ value, nodeKey }) => {
+  return reactStringReplace(value, /\{F(\d+)\}/gi, match => (
+    <span className="badge badge-danger" key={nodeKey}>
       IMAGE REF ERROR! I do not know the src of #{match}
     </span>
   ));
-
-  return v;
 };
 
 const Heading = ({ level, children }) =>
@@ -98,24 +90,26 @@ const Report = ({ reportId }) => {
       <Card className="border-0">
         <Row className="my-2">
           <Col md="6" className="p-2">
-            {reporter.username}
             <img
               className="rounded-circle ml-4 mr-2 border border-secondary float-left"
               src={reporter.profilePicture}
-              style={{ height: "20px" }}
+              style={{ height: "30px" }}
               alt={reporter.username}
             />
+            <div className="mt-1">{reporter.username}</div>
           </Col>
           <Col md="6" className="text-right pt-2 pr-4">
-            <span className="font-weight-light">
-              Reputation: {reporter.reputation}
-              {" | "}
-              Rank: {reporter.rank}
-              {" | "}
-              Signal: {reporter.signal && reporter.signal.toFixed(2)}
-              {" | "}
-              Impact: {reporter.impact && reporter.impact.toFixed(2)}
-            </span>
+            <div className="mt-1">
+              <small className="text-muted font-weight-light">
+                Reputation: {reporter.reputation}
+                {" | "}
+                Rank: {reporter.rank}
+                {" | "}
+                Signal: {reporter.signal && reporter.signal.toFixed(2)}
+                {" | "}
+                Impact: {reporter.impact && reporter.impact.toFixed(2)}
+              </small>
+            </div>
           </Col>
         </Row>
         <CardHeader className="border-top">
@@ -126,6 +120,14 @@ const Report = ({ reportId }) => {
         <ListGroup flush>
           <ListGroupItem>
             <small className="text-muted">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={`https://hackerone.com/reports/${report.id}`}
+                className="mr-2"
+              >
+                <span className="fas fa-external-link-alt" />
+              </a>
               {"#"}
               {report.id}
               {" - "}
