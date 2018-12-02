@@ -8,12 +8,12 @@ import {
   CardText,
 } from 'reactstrap';
 import gql from 'graphql-tag';
-import { useApolloQuery } from 'react-apollo-hooks';
+import { useQuery } from 'react-apollo-hooks';
 
 const GrayedoutTeam = ({ teamId }) => {
   const {
     data: { team },
-  } = useApolloQuery(
+  } = useQuery(
     gql`
       query GrayedoutTeam($teamId: ID!) {
         team: node(id: $teamId) {

@@ -3,12 +3,12 @@ import {
   Col, Card, Fade, Row, CardBody, CardText,
 } from 'reactstrap';
 import gql from 'graphql-tag';
-import { useApolloQuery } from 'react-apollo-hooks';
+import { useQuery } from 'react-apollo-hooks';
 
 const Team = ({ teamId }) => {
   const {
     data: { team },
-  } = useApolloQuery(
+  } = useQuery(
     gql`
       query Team($teamId: ID!) {
         team: node(id: $teamId) {

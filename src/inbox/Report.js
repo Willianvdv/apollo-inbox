@@ -1,6 +1,6 @@
 import { docco } from "react-syntax-highlighter/dist/styles/hljs";
 import { formatDistance } from "date-fns";
-import { useApolloQuery } from "react-apollo-hooks";
+import { useQuery } from "react-apollo-hooks";
 import React, { useContext } from "react";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
@@ -45,7 +45,7 @@ const Heading = ({ level, children }) =>
 const Report = ({ reportId }) => {
   const dispatch = useContext(InboxDispatch);
 
-  const { data } = useApolloQuery(
+  const { data } = useQuery(
     gql`
       query Report($reportId: Int!) {
         report(id: $reportId) {

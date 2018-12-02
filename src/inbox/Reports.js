@@ -1,4 +1,4 @@
-import { useApolloQuery } from "react-apollo-hooks";
+import { useQuery } from "react-apollo-hooks";
 import React, { useContext } from "react";
 import gql from "graphql-tag";
 
@@ -58,7 +58,7 @@ const Reports = ({ query }) => {
   const {
     data: { reports },
     error
-  } = useApolloQuery(
+  } = useQuery(
     gql`
       query Reports($query: String) {
         reports(query: $query) {

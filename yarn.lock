@@ -7175,10 +7175,12 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-apollo-hooks@0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/react-apollo-hooks/-/react-apollo-hooks-0.1.1.tgz#03c771ea013230099b4d717207489bfef2360fd1"
+react-apollo-hooks@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-apollo-hooks/-/react-apollo-hooks-0.2.1.tgz#27e820f780c041ede7cc16224133750ecf24a392"
+  integrity sha512-YNKi7qQWWiNNFApBOJTFLLH0AJoPHg/DseBmDB4HgCBetbh/XgwZ2DTCtRWgJcpvPbVpkt8q9ZG9Mvh2pUo13w==
   dependencies:
+    lodash "^4.17.11"
     react-fast-compare "^2.0.2"
 
 react-app-polyfill@^0.1.3:

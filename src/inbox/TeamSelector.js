@@ -1,4 +1,4 @@
-import { useApolloQuery } from 'react-apollo-hooks';
+import { useQuery } from 'react-apollo-hooks';
 import React, { useContext } from 'react';
 import gql from 'graphql-tag';
 
@@ -18,7 +18,7 @@ const TeamSelector = () => {
   const dispatch = useContext(InboxDispatch);
   const {
     data: { teams },
-  } = useApolloQuery(
+  } = useQuery(
     gql`
       {
         teams(first: 10, order_by: { field: reports_resolved, direction: DESC }) {
